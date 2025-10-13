@@ -19,6 +19,7 @@ const UserSchema = new mongoose.Schema<UserInterface>(
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -31,11 +32,13 @@ const UserSchema = new mongoose.Schema<UserInterface>(
     },
     profilePicture: {
       type: String,
-      required: true,
+      default:
+        "https://res.cloudinary.com/dwxzguawt/image/upload/v1757559976/profile_xbn7gy.png",
     },
     profileBanner: {
       type: String,
-      required: true,
+      default:
+        "https://res.cloudinary.com/dwxzguawt/image/upload/v1757559976/profile_xbn7gy.png",
     },
     followers: {
       type: [mongoose.Schema.Types.ObjectId],

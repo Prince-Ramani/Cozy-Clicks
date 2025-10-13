@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import { CONNECT_MONGO } from "./connection";
+import AuthRouter from "./Routes/authRoutes";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -23,6 +24,8 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
+
+app.use("/api/auth", AuthRouter);
 
 app.get("*", (req: Request, res: Response) => {
   console.log(req.url);

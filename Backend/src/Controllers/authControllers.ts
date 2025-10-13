@@ -4,10 +4,10 @@ import {
   validateEmailFormmate,
   validatePasswordStrenght,
 } from "../shared/utils/validators";
-import User from "src/Models/userModel";
-import { hashPassword, matchPassword } from "src/utils/password";
+import User from "../Models/userModel";
+import { hashPassword, matchPassword } from "../utils/password";
 import { error } from "console";
-import { createJWTToken } from "src/utils/JWT";
+import { createJWTToken } from "../utils/JWT";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -83,6 +83,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     await newUser.save();
 
     const token = createJWTToken(newUser._id.toString());
+
     res.cookie("user", token, { maxAge: 1000 * 60 * 24 * 30 });
     res.status(201).json({ message: "Account created successfully." });
     return;
@@ -167,7 +168,9 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const person = await User.findById(userID).select("-password").lean();
+    const person = await User.findById(userID)
+      .select("_id username email profilePicture")
+      .lean();
 
     if (!person) {
       res.status(400).json({ error: "No user found!" });
