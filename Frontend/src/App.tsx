@@ -1,15 +1,20 @@
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
-import Signup from "./pages/Signup";
-import { useQuery } from "@tanstack/react-query";
-import { getMe } from "./services/userServices";
-import type { UserGetMe } from "./types/userTypes";
+
 import { useAuthUser } from "./context/userContextProvider";
-import { useEffect } from "react";
+
+import type { UserGetMe } from "./types/userTypes";
+import { getMe } from "./services/userServices";
+
+import Signup from "./pages/Signup";
+import Signin from "./pages/Signin";
+import Home from "./pages/Home";
 
 function App() {
   const { authUser, setAuthUser } = useAuthUser();
@@ -39,8 +44,10 @@ function App() {
           />
           <Route
             path="/login"
-            element={authUser !== null ? <Navigate to="/home" /> : <Signup />}
+            element={authUser !== null ? <Navigate to="/home" /> : <Signin />}
           />
+
+          <Route path="/home" element={<Home />} />
         </Routes>
       </Router>
     </>

@@ -2,7 +2,7 @@ export class FetchError extends Error {
   status?: number;
   data?: any;
 
-  constructor(status?: number, message: string, data?: any) {
+  constructor(message: string, status?: number, data?: any) {
     super(message);
     this.name = "FetchError";
     this.status = status;
@@ -26,7 +26,7 @@ export const fetcher = async <T>(
 
   if (!response.ok || "error" in data) {
     const message = data?.error || data?.message || "Request failed";
-    throw new FetchError(response.status, message, data);
+    throw new FetchError(message, response.status, data);
   }
 
   return data as T;
