@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyJWTToken } from "../utils/JWT";
+import { verifyJWTToken } from "../utils/jwt";
 
 export const protectRoute = async (
   req: Request,

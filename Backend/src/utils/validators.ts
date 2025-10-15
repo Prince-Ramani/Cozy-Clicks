@@ -82,3 +82,24 @@ export const validateEmailFormmate = (email: string): validatorResponse => {
 
   return { isValid: true };
 };
+
+export const validatePostDescription = (des: string): validatorResponse => {
+  if (des.trim().length > 300) {
+    return {
+      isValid: false,
+      message: "Desciption can't exceed 300 charcters.",
+    };
+  }
+
+  return { isValid: true };
+};
+
+export const validatePostlocation = (loc: string): validatorResponse => {
+  if (loc.trim().length > 100) {
+    return {
+      isValid: false,
+      message: "Location can't exceed 100 charcters.",
+    };
+  }
+  return { isValid: true };
+};

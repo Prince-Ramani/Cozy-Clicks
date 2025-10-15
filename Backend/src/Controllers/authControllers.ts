@@ -3,11 +3,10 @@ import {
   validateUsername,
   validateEmailFormmate,
   validatePasswordStrenght,
-} from "../shared/utils/validators";
+} from "../utils/validators";
 import User from "../Models/userModel";
 import { hashPassword, matchPassword } from "../utils/password";
-import { error } from "console";
-import { createJWTToken } from "../utils/JWT";
+import { createJWTToken } from "../utils/jwt";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -88,11 +87,12 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json({ message: "Account created successfully." });
     return;
   } catch (err) {
-    console.log("Error occured authController.ts > signup : ", err);
+    console.error("Error occured authController.ts > signup : ", err);
     res.status(500).json({ error: "Internal server error." });
   }
 };
 
+import { error } from "console";
 export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
@@ -143,7 +143,7 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ message: "Logged in successfully." });
     return;
   } catch (err) {
-    console.log("Error occured authController.ts > signin : ", err);
+    console.error("Error occured authController.ts > signin : ", err);
     res.status(500).json({ error: "Internal server error." });
   }
 };
@@ -154,7 +154,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ message: "Loggedout successfully." });
     return;
   } catch (err) {
-    console.log("Error occured authController.ts > logout : ", err);
+    console.error("Error occured authController.ts > logout : ", err);
     res.status(500).json({ error: "Internal server error." });
   }
 };
@@ -180,7 +180,7 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json(person);
     return;
   } catch (err) {
-    console.log("Error occured authController.ts > getMe : ", err);
+    console.error("Error occured authController.ts > getMe : ", err);
     res.status(500).json({ error: "Internal server error." });
   }
 };

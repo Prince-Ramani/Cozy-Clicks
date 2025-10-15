@@ -1,19 +1,18 @@
 import mongoose, { Types, Document, ObjectId, mongo } from "mongoose";
 
-interface PostSchemaInterface extends Document {
-  _id: ObjectId;
-  userID: ObjectId;
+interface PostsDocument extends Document {
+  userID: Types.ObjectId;
   image: string[];
   description?: string;
   location?: string;
-  likes: ObjectId[];
-  categories: ObjectId[];
+  likes: Types.ObjectId[];
+  categories: Types.ObjectId[];
   views: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const postSchema = new mongoose.Schema<PostSchemaInterface>(
+const postSchema = new mongoose.Schema<PostsDocument>(
   {
     userID: {
       type: mongoose.Schema.Types.ObjectId,
@@ -53,6 +52,6 @@ const postSchema = new mongoose.Schema<PostSchemaInterface>(
   },
 );
 
-const Posts = mongoose.model("Posts", postSchema);
+const Posts = mongoose.model<PostsDocument>("Posts", postSchema);
 
 export default Posts;
