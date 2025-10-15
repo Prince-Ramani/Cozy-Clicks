@@ -5,7 +5,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import { CONNECT_MONGO } from "./connection";
+
 import AuthRouter from "./Routes/authRoutes";
+import PostRouter from "./Routes/postRoutes";
+import CommentRouter from "./Routes/commentRoutes";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -25,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use("/api/auth", AuthRouter);
+app.use("/api/post", PostRouter);
+app.use("/api/post/comment", CommentRouter);
 
 app.get("*", (req: Request, res: Response) => {
   console.log(req.url);

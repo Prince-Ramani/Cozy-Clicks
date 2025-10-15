@@ -8,6 +8,7 @@ interface PostsDocument extends Document {
   likes: Types.ObjectId[];
   categories: Types.ObjectId[];
   views: number;
+  pinned?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -16,7 +17,7 @@ const postSchema = new mongoose.Schema<PostsDocument>(
   {
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
       required: true,
     },
     image: {
@@ -34,13 +35,17 @@ const postSchema = new mongoose.Schema<PostsDocument>(
     },
     likes: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Users",
+      ref: "User",
       default: [],
     },
     categories: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Category",
       default: [],
+    },
+    pinned: {
+      type: Boolean,
+      default: false,
     },
     views: {
       type: Number,

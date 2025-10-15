@@ -1,8 +1,14 @@
+import { error } from "console";
 import { Request, Response } from "express";
 import mongoose, { isValidObjectId, Types } from "mongoose";
 import Posts from "src/Models/postModel";
+import User from "src/Models/userModel";
+import cloudinary from "src/services/cloudinary";
 import { CreatePostInput } from "src/Types/postTypes";
-import { uploadBufferToCloudinary } from "src/utils/uploadToCloudinary";
+import {
+  uploadBufferToCloudinary,
+  getCloudinaryPostID,
+} from "src/utils/cloudinary";
 import {
   validatePostDescription,
   validatePostlocation,
@@ -59,7 +65,7 @@ export const createPost = async (
 
     if (description?.trim()) {
       const isValidDescription = validatePostDescription(description);
-      if (!isValidDescription.isValid && isValidDescription.message) {
+      if (!isValidDescription.isValid) {
         res.status(400).json({ error: isValidDescription.message });
         return;
       }
@@ -67,7 +73,7 @@ export const createPost = async (
 
     if (location?.trim()) {
       const isValidlocation = validatePostlocation(location);
-      if (!isValidlocation.isValid && isValidlocation.message) {
+      if (!isValidlocation.isValid) {
         res.status(400).json({ error: isValidlocation.message });
         return;
       }
@@ -93,6 +99,178 @@ export const createPost = async (
     });
   } catch (err) {
     console.error("Error occured postControllers.ts > createPost : ", err);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const deletePost = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const postID = req.params.postID;
+    const userID = req.user;
+
+    if (!userID) {
+      res.status(400).json({ error: "Unauthorized." });
+      return;
+    }
+
+    if (!postID) {
+      res.status(400).json({ error: "Post ID required to delete a post." });
+      return;
+    }
+
+    const user = await User.exists({ _id: userID });
+
+    if (!user) {
+      res.status(400).json({ error: "Unauthorized." });
+      return;
+    }
+
+    const post = await Posts.findOne({ userID, _id: postID });
+
+    if (!post) {
+      res.status(404).json({ error: "No such post found" });
+      return;
+    }
+
+    if (post.image && post.image.length > 0) {
+      const imageIDs = post.image.map((link) => {
+        return getCloudinaryPostID(link);
+      });
+
+      await cloudinary.api.delete_resources(imageIDs);
+    }
+
+    await Posts.deleteOne({ _id: postID });
+
+    res.status(200).json({ message: "Post deleted successfully." });
+  } catch (err) {
+    console.error("Error occured postControllers.ts > deletePost : ", err);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const pinUnpinPost = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const postID = req.params.postID;
+    const userID = req.user;
+
+    if (!userID) {
+      res.status(401).json({ error: "Unauthorized." });
+      return;
+    }
+    if (!postID) {
+      res.status(400).json({ error: "Post ID required to pin/unpin a post." });
+      return;
+    }
+
+    const user = await User.exists({ _id: userID });
+
+    if (!user) {
+      res.status(400).json({ error: "Unauthorized." });
+      return;
+    }
+
+    const post = await Posts.findOne({ userID, _id: postID });
+
+    if (!post) {
+      res.status(404).json({ error: "No such post found" });
+      return;
+    }
+
+    post.pinned = !post.pinned;
+    await post.save({});
+
+    res.status(200).json({
+      message: `Post ${post.pinned ? "Pinned" : "Unpinned"} successfully.`,
+    });
+  } catch (err) {
+    console.error("Error occured postControllers.ts > pinUnpinPost : ", err);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const editPost = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const postID = req.params.postID;
+    const userID = req.user;
+    const {
+      categories,
+      description,
+      location,
+    }: {
+      categories: string[];
+      description?: string;
+      location?: string;
+    } = req.body;
+
+    if (!userID) {
+      res.status(401).json({ error: "Unauthorized." });
+      return;
+    }
+
+    if (!postID) {
+      res.status(400).json({ error: "Post ID required to edit a post." });
+      return;
+    }
+
+    const user = await User.exists({ _id: userID });
+
+    if (!user) {
+      res.status(400).json({ error: "Unauthorized." });
+      return;
+    }
+
+    const post = await Posts.findOne({ userID, _id: postID });
+
+    if (!post) {
+      res.status(404).json({ error: "No such post found" });
+      return;
+    }
+
+    if (Array.isArray(categories) && categories.length > 0) {
+      const newCategories: Types.ObjectId[] = [];
+      for (const str of categories) {
+        const trimmed = str.trim();
+
+        if (!isValidObjectId(trimmed)) {
+          res.status(400).json({ error: `Invalid category ID: ${trimmed}` });
+          return;
+        }
+        newCategories.push(new mongoose.Types.ObjectId(trimmed));
+      }
+
+      post.categories = newCategories;
+    }
+
+    if (description?.trim()) {
+      const isValidDescription = validatePostDescription(description);
+      if (!isValidDescription.isValid) {
+        res.status(400).json({ error: isValidDescription.message });
+        return;
+      }
+      post.description = description;
+    }
+
+    if (location?.trim()) {
+      const isValidlocation = validatePostlocation(location);
+      if (!isValidlocation.isValid) {
+        res.status(400).json({ error: isValidlocation.message });
+        return;
+      }
+      post.location = location;
+    }
+
+    await post.save();
+
+    res.status(200).json({ message: "Post edited successfully." });
+  } catch (err) {
+    console.error("Error occured postControllers.ts > editPost : ", err);
     res.status(500).json({ error: "Internal server error." });
   }
 };
