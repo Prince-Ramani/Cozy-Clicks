@@ -57,7 +57,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const emailAlreadyTaken = await User.exists({ email });
+    const emailAlreadyTaken = await User.exists({ email }).exec();
 
     if (emailAlreadyTaken) {
       res.status(409).json({
@@ -73,6 +73,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = await hashPassword(password);
+
     const newUser = new User({
       username,
       email,
@@ -84,6 +85,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     const token = createJWTToken(newUser._id.toString());
 
     res.cookie("user", token, { maxAge: 1000 * 60 * 24 * 30 });
+
     res.status(201).json({ message: "Account created successfully." });
     return;
   } catch (err) {
@@ -92,7 +94,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-import { error } from "console";
 export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
@@ -119,7 +120,10 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
+      .select("_id email password")
+      .lean()
+      .exec();
 
     if (!user) {
       res.status(404).json({
@@ -128,9 +132,9 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const passworCorrect = await matchPassword(password, user.password);
+    const passwordCorrect = await matchPassword(password, user.password);
 
-    if (!passworCorrect) {
+    if (!passwordCorrect) {
       res.status(400).json({
         error: "Incorrect password",
       });
@@ -141,7 +145,6 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
     res.cookie("user", token, { maxAge: 1000 * 60 * 24 * 30 });
 
     res.status(200).json({ message: "Logged in successfully." });
-    return;
   } catch (err) {
     console.error("Error occured authController.ts > signin : ", err);
     res.status(500).json({ error: "Internal server error." });
@@ -170,7 +173,8 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
 
     const person = await User.findById(userID)
       .select("_id username email profilePicture")
-      .lean();
+      .lean()
+      .exec();
 
     if (!person) {
       res.status(400).json({ error: "No user found!" });

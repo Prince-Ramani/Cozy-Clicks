@@ -1,20 +1,20 @@
 import mongoose, { Types, Document, ObjectId } from "mongoose";
 
-interface UserInterface extends Document {
-  _id: ObjectId;
+export interface UserDocument extends Document {
+  _id: Types.ObjectId;
   username: string;
   email: string;
   password: string;
   profilePicture: string;
   profileBanner: string;
-  followers: Types.ObjectId[];
-  following: Types.ObjectId[];
+  followers: Types.ObjectId[] | UserDocument[];
+  following: Types.ObjectId[] | UserDocument[];
   views: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const UserSchema = new mongoose.Schema<UserInterface>(
+const UserSchema = new mongoose.Schema<UserDocument>(
   {
     username: {
       type: String,
@@ -60,6 +60,6 @@ const UserSchema = new mongoose.Schema<UserInterface>(
   },
 );
 
-const User = mongoose.model<UserInterface>("User", UserSchema);
+const User = mongoose.model<UserDocument>("User", UserSchema);
 
 export default User;

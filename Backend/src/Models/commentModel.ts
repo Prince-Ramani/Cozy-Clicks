@@ -1,17 +1,20 @@
 import mongoose, { Types } from "mongoose";
+import { UserDocument } from "./userModel";
+import { PostsDocument } from "./postModel";
 
 interface CommentsDocument {
-  postID: Types.ObjectId;
-  commenterID: Types.ObjectId;
+  _id: Types.ObjectId;
+  postID: Types.ObjectId | PostsDocument;
+  commenterID: Types.ObjectId | UserDocument;
   text: string;
   parentComment?: Types.ObjectId;
-  replies: Types.ObjectId[];
-  likes: Types.ObjectId[];
+  replies: Types.ObjectId[] | UserDocument[];
+  likes: Types.ObjectId[] | UserDocument[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-const CommentsScheme = new mongoose.Schema<CommentsDocument>(
+const CommentsSchema = new mongoose.Schema<CommentsDocument>(
   {
     postID: {
       type: mongoose.Schema.Types.ObjectId,
@@ -51,6 +54,6 @@ const CommentsScheme = new mongoose.Schema<CommentsDocument>(
   },
 );
 
-const Comments = mongoose.model<CommentsDocument>("Comments", CommentsScheme);
+const Comments = mongoose.model<CommentsDocument>("Comments", CommentsSchema);
 
 export default Comments;

@@ -1,6 +1,7 @@
-import mongoose, { Types, Document, ObjectId, mongo } from "mongoose";
+import mongoose, { Types, Document } from "mongoose";
 
-interface PostsDocument extends Document {
+export interface PostsDocument extends Document {
+  _id: Types.ObjectId;
   userID: Types.ObjectId;
   image: string[];
   description?: string;

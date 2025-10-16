@@ -9,6 +9,7 @@ import {
   uploadBufferToCloudinary,
   getCloudinaryPostID,
 } from "src/utils/cloudinary";
+import { toObjectId } from "src/utils/functions";
 import {
   validatePostDescription,
   validatePostlocation,
@@ -59,7 +60,7 @@ export const createPost = async (
           return;
         }
 
-        categoriesObjectIDs.push(new mongoose.Types.ObjectId(trimmed));
+        categoriesObjectIDs.push(toObjectId(trimmed));
       }
     }
 
@@ -83,7 +84,7 @@ export const createPost = async (
       files.map((f) => uploadBufferToCloudinary(f.buffer)),
     );
     const payload: CreatePostInput = {
-      userID: new mongoose.Types.ObjectId(userID),
+      userID: toObjectId(userID),
       image: uploadResults,
       categories: categoriesObjectIDs,
       location: location?.trim(),
@@ -121,14 +122,14 @@ export const deletePost = async (
       return;
     }
 
-    const user = await User.exists({ _id: userID });
+    const user = await User.exists({ _id: userID }).exec();
 
     if (!user) {
       res.status(400).json({ error: "Unauthorized." });
       return;
     }
 
-    const post = await Posts.findOne({ userID, _id: postID });
+    const post = await Posts.findOne({ userID, _id: postID }).lean().exec();
 
     if (!post) {
       res.status(404).json({ error: "No such post found" });
@@ -169,14 +170,14 @@ export const pinUnpinPost = async (
       return;
     }
 
-    const user = await User.exists({ _id: userID });
+    const user = await User.exists({ _id: userID }).exec();
 
     if (!user) {
       res.status(400).json({ error: "Unauthorized." });
       return;
     }
 
-    const post = await Posts.findOne({ userID, _id: postID });
+    const post = await Posts.findOne({ userID, _id: postID }).exec();
 
     if (!post) {
       res.status(404).json({ error: "No such post found" });
@@ -219,14 +220,14 @@ export const editPost = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = await User.exists({ _id: userID });
+    const user = await User.exists({ _id: userID }).exec();
 
     if (!user) {
       res.status(400).json({ error: "Unauthorized." });
       return;
     }
 
-    const post = await Posts.findOne({ userID, _id: postID });
+    const post = await Posts.findOne({ userID, _id: postID }).exec();
 
     if (!post) {
       res.status(404).json({ error: "No such post found" });
@@ -242,7 +243,7 @@ export const editPost = async (req: Request, res: Response): Promise<void> => {
           res.status(400).json({ error: `Invalid category ID: ${trimmed}` });
           return;
         }
-        newCategories.push(new mongoose.Types.ObjectId(trimmed));
+        newCategories.push(toObjectId(trimmed));
       }
 
       post.categories = newCategories;
