@@ -9,8 +9,6 @@
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "skipLibCheck": true,
-        // Needed for path aliases to work
-        "baseUrl": ".", // Base is backend/
     },
     "include": [
         "src"

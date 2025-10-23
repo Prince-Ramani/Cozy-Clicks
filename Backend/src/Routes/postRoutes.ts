@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { protectRoute } from "../Middlewares/protectRoute";
-import { multerErrorHandler } from "src/Middlewares/multerErrorHandler";
+import { multerErrorHandler } from "../Middlewares/multerErrorHandler";
 import {
   createPost,
   deletePost,
   editPost,
   pinUnpinPost,
-} from "src/Controllers/postControllers";
+} from "../Controllers/postControllers";
 
 const router = Router();
 

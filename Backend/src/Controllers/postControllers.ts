@@ -1,19 +1,19 @@
 import { error } from "console";
 import { Request, Response } from "express";
 import mongoose, { isValidObjectId, Types } from "mongoose";
-import Posts from "src/Models/postModel";
-import User from "src/Models/userModel";
-import cloudinary from "src/services/cloudinary";
-import { CreatePostInput } from "src/Types/postTypes";
+import Posts from "../Models/postModel";
+import User from "../Models/userModel";
+import cloudinary from "../services/cloudinary";
+import { CreatePostInput } from "../Types/postTypes";
 import {
   uploadBufferToCloudinary,
   getCloudinaryPostID,
-} from "src/utils/cloudinary";
-import { toObjectId } from "src/utils/functions";
+} from "../utils/cloudinary";
+import { toObjectId } from "../utils/functions";
 import {
   validatePostDescription,
   validatePostlocation,
-} from "src/utils/validators";
+} from "../utils/validators";
 
 interface CreatePostPayload {
   categories: string[];

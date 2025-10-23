@@ -1,4 +1,4 @@
-import cloudinary from "src/services/cloudinary";
+import cloudinary from "../services/cloudinary";
 import { Readable } from "stream";
 
 const POSTS_FOLDER = "Cozy-Clicks/posts";

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import mongoose, { isValidObjectId, ObjectId, Types } from "mongoose";
-import Comments from "src/Models/commentModel";
-import Posts from "src/Models/postModel";
-import { createCommentInput } from "src/Types/postTypes";
-import { toObjectId } from "src/utils/functions";
+import { isValidObjectId, ObjectId, Types } from "mongoose";
+import Comments from "../Models/commentModel";
+import Posts from "../Models/postModel";
+import { createCommentInput } from "../Types/postTypes";
+import { toObjectId } from "../utils/functions";
 
 export const addComment = async (
   req: Request,
@@ -56,7 +56,7 @@ export const addComment = async (
 
     if (parentComment && typeof parentComment !== "undefined") {
       if (!isValidObjectId(parentComment)) {
-        res.status(400).json({ error: "Invalid comment id." });
+        res.status(400).json({ error: "Invalid parent comment id." });
         return;
       }
 
@@ -223,8 +223,7 @@ export const editComment = async (
     comment.text = text;
     await comment.save();
 
-    await res.status(200).json({ message: "Comment edited successfully." });
-    return;
+    res.status(200).json({ message: "Comment edited successfully." });
   } catch (err) {
     console.error("Error occured commentControllers.ts > editComment : ", err);
     res.status(500).json({ error: "Internal server error." });
@@ -284,6 +283,72 @@ export const likeUnlikeComment = async (
   } catch (err) {
     console.error(
       "Error occured commentControllers.ts > likeUnlikeComment : ",
+      err,
+    );
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const pinUnpinComment = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const commentID: string | undefined = req.params.commentID;
+
+    let userID: string | Types.ObjectId | undefined = req.user;
+
+    if (!userID) {
+      res.status(401).json({ error: "Unauthorized." });
+      return;
+    }
+
+    userID = toObjectId(userID);
+
+    if (!commentID) {
+      res
+        .status(400)
+        .json({ error: "Comment id required to pin/unpin a comment." });
+      return;
+    }
+
+    if (!isValidObjectId(commentID)) {
+      res.status(401).json({ error: "Invalid comment id." });
+      return;
+    }
+
+    const comment = await Comments.findById(commentID)
+      .populate({ path: "postID", select: "userID" })
+      .exec();
+
+    if (!comment) {
+      res.status(404).json({ error: "No such comment found." });
+      return;
+    }
+
+    let isAdmin: boolean = false;
+
+    if ("userID" in comment.postID) {
+      isAdmin = comment.postID.userID.toString() === userID.toString();
+    }
+
+    if (!isAdmin) {
+      res.status(400).json({ error: "Only admin can pin/unpin comments." });
+      return;
+    }
+
+    comment.isPinned = !comment.isPinned;
+
+    await comment.save();
+
+    res.status(200).json({
+      message: `Comment ${comment.isPinned ? "Pinned" : "Unpinned"} successfully.`,
+    });
+
+    return;
+  } catch (err) {
+    console.error(
+      "Error occured commentControllers.ts > pinUnpinComment : ",
       err,
     );
     res.status(500).json({ error: "Internal server error." });

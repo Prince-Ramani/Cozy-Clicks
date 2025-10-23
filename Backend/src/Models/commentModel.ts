@@ -2,7 +2,7 @@ import mongoose, { Types } from "mongoose";
 import { UserDocument } from "./userModel";
 import { PostsDocument } from "./postModel";
 
-interface CommentsDocument {
+interface CommentsDocument extends Document {
   _id: Types.ObjectId;
   postID: Types.ObjectId | PostsDocument;
   commenterID: Types.ObjectId | UserDocument;
@@ -10,6 +10,7 @@ interface CommentsDocument {
   parentComment?: Types.ObjectId;
   replies: Types.ObjectId[] | UserDocument[];
   likes: Types.ObjectId[] | UserDocument[];
+  isPinned: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,6 +42,10 @@ const CommentsSchema = new mongoose.Schema<CommentsDocument>(
       ref: "Comments",
       required: false,
       default: null,
+    },
+    isPinned: {
+      type: Boolean,
+      default: false,
     },
     replies: [
       {
