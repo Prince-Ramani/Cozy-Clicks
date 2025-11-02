@@ -28,7 +28,7 @@ const Home = () => {
           <img
             src={img}
             alt=""
-            className="w-full mb-2  md:mb-3 rounded-lg hover:scale-105 transition-transform duration-300"
+            className="w-full mb-2 select-none  md:mb-3 rounded-lg hover:scale-105 transition-transform duration-300"
           />
         </motion.div>
       ))}

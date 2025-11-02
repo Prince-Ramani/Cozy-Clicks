@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import MainSearch from "./MainComponenets/MainSearch";
 import { useAuthUser } from "@/context/userContextProvider";
 import ThemeSwitcher from "@/Components/ThemeSwitcher";
+import UserButton from "@/Components/UserButton";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -17,7 +18,10 @@ const Header = () => {
         <span className="text-primary font-bold hidden md:block lg:text-lg">
           Cozy-Clicks
         </span>
-        <span className="font-semibold select-none hidden md:block text-sm 2xl:text-base cursor-pointer hover:bg-accent rounded-full p-2 active:text-primary transition-colors duration-150">
+        <span
+          role="button"
+          className="font-semibold select-none hidden md:block text-sm 2xl:text-base cursor-pointer hover:bg-accent rounded-full p-2 active:text-primary transition-colors duration-150"
+        >
           Explore
         </span>
       </div>
@@ -41,7 +45,10 @@ const Header = () => {
           </button>
         </div>
       ) : (
-        <ThemeSwitcher />
+        <div className="flex gap-2 sm:gap-3 md:gap-4 xl:gap-5 justify-center items-center ">
+          <ThemeSwitcher />
+          <UserButton />
+        </div>
       )}
     </div>
   );

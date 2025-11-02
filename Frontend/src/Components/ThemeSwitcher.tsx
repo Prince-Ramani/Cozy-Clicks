@@ -3,7 +3,7 @@ import { useTheme } from "./theme-provider";
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
   return (
-    <div
+    <button
       className="p-2 hover:bg-accent hover:text-accent-foreground rounded-full active:bg-primary/40 active:text-primary-foreground/90 cursor-pointer"
       onClick={() => {
         if (theme === "dark") setTheme("light");
@@ -15,7 +15,7 @@ const ThemeSwitcher = () => {
       ) : (
         <MoonStar className=" size-5 " />
       )}
-    </div>
+    </button>
   );
 };
 
