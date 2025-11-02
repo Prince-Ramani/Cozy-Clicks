@@ -20,6 +20,7 @@ interface CreatePostPayload {
   description?: string;
   location?: string;
 }
+ 
 
 export const createPost = async (
   req: Request,

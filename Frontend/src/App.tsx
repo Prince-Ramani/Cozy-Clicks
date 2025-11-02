@@ -14,7 +14,9 @@ import { getMe } from "./services/userServices";
 
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
+import Layout from "./layouts/MainLayout/MainLayout";
 import Home from "./pages/Home";
+import Ideas from "./pages/Ideas";
 
 function App() {
   const { authUser, setAuthUser } = useAuthUser();
@@ -30,9 +32,12 @@ function App() {
       data !== undefined &&
       typeof data === "object" &&
       "_id" in data
-    )
+    ) {
       setAuthUser(data);
-  }, [data, setAuthUser]);
+    } else if (authUser !== null) {
+      setAuthUser(null);
+    }
+  }, [data, setAuthUser, authUser]);
 
   return (
     <>
@@ -47,7 +52,10 @@ function App() {
             element={authUser !== null ? <Navigate to="/home" /> : <Signin />}
           />
 
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="ideas" element={<Ideas />} />
+          </Route>
         </Routes>
       </Router>
     </>

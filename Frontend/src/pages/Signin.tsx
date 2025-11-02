@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import type { FetchError } from "@/lib/utils/fetcher";
 
 import { signinAPI } from "@/services/userServices";
-import { validateEmailFormmate } from "../lib/utils/validators";
+import { validateEmailFormmate } from "@/lib/utils/validators";
 
 import Loading from "@/Components/Loading";
 

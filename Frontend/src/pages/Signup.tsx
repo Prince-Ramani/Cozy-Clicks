@@ -18,7 +18,7 @@ import {
   validateUsername,
   validateEmailFormmate,
   validatePasswordStrenght,
-} from "../lib/utils/validators";
+} from "@/lib/utils/validators";
 
 import Loading from "@/Components/Loading";
 
