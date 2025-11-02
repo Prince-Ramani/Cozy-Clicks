@@ -94,59 +94,62 @@ const Signup = () => {
 
   return (
     <div
-      className={`flex relative justify-center items-center  min-h-screen w-full p-2 `}
+      className={`flex relative justify-center items-center min-h-screen w-full p-2`}
       style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
     >
-      {isPending ? (
+      {isPending && (
         <div className="absolute z-10">
-          <Loading />{" "}
+          <Loading />
         </div>
-      ) : (
-        ""
       )}
+
       <div
-        className={`flex flex-col rounded-xl bg-white py-3 pb-6 2xl:py-6 2xl:pb-10 max-w-xl m-2 w-full justify-center items-center ${isPending ? "opacity-60 pointer-events-none" : "opacity-95"} `}
+        className={`flex flex-col rounded-xl bg-card py-3 pb-6 2xl:py-6 2xl:pb-10 max-w-xl m-2 w-full justify-center items-center ${
+          isPending ? "opacity-60 pointer-events-none" : "opacity-100"
+        }`}
       >
-        <header className="font-bold flex flex-col gap-1 text-2xl sm:text-2xl xl:text-3xl py-2 w-full px-5 md:px-9 ">
-          <h1 className="text-blue-700">Sign up</h1>
-          <h1 className="text-base sm:text-xl xl-text-2xl">
+        <header className="font-bold flex flex-col gap-1 text-2xl sm:text-2xl xl:text-3xl py-2 w-full px-5 md:px-9">
+          <h1 className="text-primary">Sign up</h1>
+          <h1 className="text-base sm:text-xl xl-text-2xl text-muted-foreground">
             Welcome to Cozy-Clicks
           </h1>
         </header>
-        <main className="w-full px-5  md:px-9 ">
-          <div className=" flex flex-col gap-1.5 min-w-full   ">
+
+        <main className="w-full px-5 md:px-9">
+          <div className="flex flex-col gap-1.5 min-w-full">
             {/* Username */}
-            <div className="flex group flex-col justify-center hover:text-gray-500 gap-1 ">
+            <div className="flex flex-col group gap-1">
               <label
                 htmlFor="username"
-                className="group group-focus-within:text-blue-700 text-sm sm:text-lg"
+                className="text-sm sm:text-lg text-foreground group-focus-within:text-primary"
               >
-                Username:{" "}
+                Username:
               </label>
               <input
                 type="text"
                 name="username"
                 id="username"
-                className=" border border-black rounded-sm p-1 xl:text-lg @3xl:text-2xl group focus-within:outline-none focus-within:text-blue-700 group-hover:border-gray-500 focus-within:border-blue-700"
+                className="border border-border rounded-sm p-1 xl:text-lg bg-background text-foreground focus:outline-none focus:border-primary"
                 onChange={(e) =>
                   setInfo((prev) => ({ ...prev, username: e.target.value }))
                 }
                 value={info.username}
               />
             </div>
+
             {/* Email */}
-            <div className="flex group flex-col justify-center hover:text-gray-500 gap-1 ">
+            <div className="flex flex-col group gap-1">
               <label
                 htmlFor="email"
-                className="group group-focus-within:text-blue-700 text-sm sm:text-lg"
+                className="text-sm sm:text-lg text-foreground group-focus-within:text-primary"
               >
-                Email:{" "}
+                Email:
               </label>
               <input
                 type="email"
                 name="email"
                 id="email"
-                className=" border border-black rounded-sm p-1 xl:text-lg @3xl:text-2xl group focus-within:outline-none focus-within:text-blue-700 group-hover:border-gray-500 focus-within:border-blue-700"
+                className="border border-border rounded-sm p-1 xl:text-lg bg-background text-foreground focus:outline-none focus:border-primary"
                 onChange={(e) =>
                   setInfo((prev) => ({ ...prev, email: e.target.value }))
                 }
@@ -155,19 +158,19 @@ const Signup = () => {
             </div>
 
             {/* Password */}
-            <div className="flex  group flex-col justify-center hover:text-gray-500 gap-1 ">
+            <div className="flex flex-col group gap-1">
               <label
                 htmlFor="password"
-                className="group group-focus-within:text-blue-700 text-sm sm:text-lg"
+                className="text-sm sm:text-lg text-foreground group-focus-within:text-primary"
               >
-                Password:{" "}
+                Password:
               </label>
-              <div className="w-full  items-center flex relative  group">
+              <div className="w-full flex items-center relative group">
                 <input
-                  type={`${eyeOn ? "text" : "password"}`}
+                  type={eyeOn ? "text" : "password"}
                   name="password"
                   id="password"
-                  className=" border border-black w-full rounded-sm p-1 xl:text-lg @3xl:text-2xl group focus-within:outline-none focus-within:text-blue-700 group-hover:border-gray-500 focus-within:border-blue-700  pr-10"
+                  className="border border-border w-full rounded-sm p-1 xl:text-lg bg-background text-foreground focus:outline-none focus:border-primary pr-10"
                   onChange={(e) =>
                     setInfo((prev) => ({ ...prev, password: e.target.value }))
                   }
@@ -175,35 +178,39 @@ const Signup = () => {
                 />
                 {eyeOn ? (
                   <Eye
-                    className="cursor-pointer  hover:text-black hover:bg-blue-100/70 p-1 rounded-full size-7 active:bg-green-300/70  absolute right-1.5 group  group-focus-within:text-blue-700"
+                    className="cursor-pointer hover:bg-accent p-1 rounded-full size-7 active:bg-accent/70 absolute right-1.5 text-muted-foreground"
                     onClick={() => setEyeOn(false)}
                   />
                 ) : (
                   <EyeOff
-                    className="cursor-pointer  hover:text-black hover:bg-blue-100/70 p-1 rounded-full size-7 active:bg-green-300/70  absolute right-1.5 group group-focus-within:text-blue-700 "
+                    className="cursor-pointer hover:bg-accent p-1 rounded-full size-7 active:bg-accent/70 absolute right-1.5 text-muted-foreground"
                     onClick={() => setEyeOn(true)}
                   />
                 )}
               </div>
             </div>
+
+            {/* Submit Button */}
             <button
-              className="bg-blue-400 text-white mt-3 p-2 focus-within:outline-2 focus-within:outline-black rounded-sm md:hover:opacity-80 active:bg-green-600 transition-colors cursor-pointer text-sm sm:text-base"
+              className="bg-primary text-primary-foreground mt-3 p-2 rounded-sm hover:opacity-90 active:bg-primary/80 transition-colors text-sm sm:text-base"
               onClick={handleSubmit}
               disabled={isPending}
             >
-              {isPending ? "Signing up" : "Sign up"}
+              {isPending ? "Signing up..." : "Sign up"}
             </button>
+
             <a
               href="/login"
-              className="group hover:text-gray-600 text-xs sm:text-base"
+              className="group text-xs sm:text-base text-muted-foreground hover:text-foreground"
             >
               Already have an account?{" "}
-              <span className="text-blue-700 group-hover:text-blue-700/70 underline group">
+              <span className="text-primary underline group-hover:opacity-80">
                 Sign in
               </span>
             </a>
+
             <button
-              className="bg-slate-300 text-black  p-2 focus-within:outline-2 focus-within:outline-black rounded-sm md:hover:opacity-80 active:bg-slate-600 transition-colors cursor-pointer text-sm sm:text-base"
+              className="bg-secondary text-secondary-foreground p-2 rounded-sm hover:opacity-90 active:bg-secondary/80 transition-colors text-sm sm:text-base"
               onClick={() => navigate("/login")}
               disabled={isPending}
             >

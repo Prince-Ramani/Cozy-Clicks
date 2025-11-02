@@ -3,34 +3,23 @@ import { useState } from "react";
 
 const MainSearch = () => {
   const [search, setSearch] = useState("");
-  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   return (
     <div
-      className={` relative w-full px-2  flex items-center gap-2 border border-transparent bg-slate-200 ${isFocused ? "rounded-t-lg " : "rounded-lg"}`}
+      className={`relative w-full flex items-center gap-2 px-2 border border-transparent bg-input rounded-md `}
     >
-      <Search className="text-gray-600" />
+      <Search className="text-foreground" />
       <input
         type="text"
-        className="w-full h-8 bg-transparent focus:outline-none  "
+        className="w-full h-8 bg-transparent focus:outline-none  text-foreground"
         onChange={(e) => setSearch(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         value={search}
+        placeholder="Search..."
       />
       <X
-        className={`hidden ${search.trim().length > 0 ? "md:block" : "hidden"} cursor-pointer hover:bg-white/50 hover:text-gray-600 rounded-full p-1 size-6 active:bg-blue-500/40 active:text-white  text-gray-600 `}
+        className={` ${search.trim().length > 0 ? "block" : "hidden"} cursor-pointer hover:bg-accent hover:text-foreground/80 rounded-full p-0.5 active:bg-accent/30 active:text-foreground text-foreground`}
         onClick={() => setSearch("")}
       />
-      {isFocused ? (
-        <div
-          className={`absolute top-8 right-0 bottom-0 z-50 w-full h-full bg-slate-200 border-t border-neutral-400 rounded-b-lg `}
-        >
-          Hello
-        </div>
-      ) : (
-        ""
-      )}
     </div>
   );
 };

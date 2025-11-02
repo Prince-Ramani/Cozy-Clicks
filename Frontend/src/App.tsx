@@ -17,6 +17,7 @@ import Signin from "./pages/Signin";
 import Layout from "./layouts/MainLayout/MainLayout";
 import Home from "./pages/Home";
 import Ideas from "./pages/Ideas";
+import { ThemeProvider } from "./Components/theme-provider";
 
 function App() {
   const { authUser, setAuthUser } = useAuthUser();
@@ -41,23 +42,25 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Routes>
-          <Route
-            path="/signup"
-            element={authUser !== null ? <Navigate to="/home" /> : <Signup />}
-          />
-          <Route
-            path="/login"
-            element={authUser !== null ? <Navigate to="/home" /> : <Signin />}
-          />
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <Router>
+          <Routes>
+            <Route
+              path="/signup"
+              element={authUser !== null ? <Navigate to="/home" /> : <Signup />}
+            />
+            <Route
+              path="/login"
+              element={authUser !== null ? <Navigate to="/home" /> : <Signin />}
+            />
 
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="ideas" element={<Ideas />} />
-          </Route>
-        </Routes>
-      </Router>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="ideas" element={<Ideas />} />
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </>
   );
 }
