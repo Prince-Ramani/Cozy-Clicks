@@ -1,0 +1,26 @@
+import type { LinksInterface } from "@/types/userTypes";
+import { Instagram } from "lucide-react";
+
+const LinksDisplayer = ({ links }: { links: LinksInterface }) => {
+  return (
+    <div>
+      {Object.entries(links).map(([key, value]) => {
+        if (value.trim() === "") {
+          return (
+            <div>
+              {key === "instagram" ? (
+                <Instagram className="size-5 hover:text-primary/20 cursor-pointer" />
+              ) : (
+                ""
+              )}
+            </div>
+          );
+        } else {
+          return;
+        }
+      })}
+    </div>
+  );
+};
+
+export default LinksDisplayer;

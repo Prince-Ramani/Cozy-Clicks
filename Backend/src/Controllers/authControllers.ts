@@ -7,6 +7,7 @@ import {
 import User from "../Models/userModel";
 import { hashPassword, matchPassword } from "../utils/password";
 import { createJWTToken } from "../utils/jwt";
+import { isValidObjectId } from "mongoose";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -172,7 +173,7 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
     }
 
     const person = await User.findById(userID)
-      .select("_id username email profilePicture")
+      .select("_id username email profilePicture profileBanner")
       .lean()
       .exec();
 

@@ -1,5 +1,14 @@
 import mongoose, { Types, Document, ObjectId } from "mongoose";
 
+interface LinksInterface {
+  instagram?: string;
+  facebook?: string;
+  youtube?: string;
+  linkedin?: string;
+  website?: string;
+  twitter?: string;
+}
+
 export interface UserDocument extends Document {
   _id: Types.ObjectId;
   username: string;
@@ -9,6 +18,7 @@ export interface UserDocument extends Document {
   profileBanner: string;
   followers: Types.ObjectId[] | UserDocument[];
   following: Types.ObjectId[] | UserDocument[];
+  links: LinksInterface;
   views: number;
   createdAt: Date;
   updatedAt: Date;
@@ -49,6 +59,14 @@ const UserSchema = new mongoose.Schema<UserDocument>(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
       default: [],
+    },
+    links: {
+      instagram: { type: String, default: "" },
+      facebook: { type: String, default: "" },
+      youtube: { type: String, default: "" },
+      linkedin: { type: String, default: "" },
+      website: { type: String, default: "" },
+      twitter: { type: String, default: "" },
     },
     views: {
       type: Number,

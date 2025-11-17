@@ -18,6 +18,7 @@ import Layout from "./layouts/MainLayout/MainLayout";
 import Home from "./pages/Home";
 import Ideas from "./pages/Ideas";
 import { ThemeProvider } from "./Components/theme-provider";
+import Profile from "./pages/Profile";
 
 function App() {
   const { authUser, setAuthUser } = useAuthUser();
@@ -57,6 +58,8 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="ideas" element={<Ideas />} />
+
+              <Route path="profile/:profileID" element={<Profile />} />
             </Route>
           </Routes>
         </Router>

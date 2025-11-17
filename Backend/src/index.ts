@@ -9,6 +9,7 @@ import { CONNECT_MONGO } from "./connection";
 import AuthRouter from "./Routes/authRoutes";
 import PostRouter from "./Routes/postRoutes";
 import CommentRouter from "./Routes/commentRoutes";
+import ProfileRouter from "./Routes/profileRoutes";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use("/api/auth", AuthRouter);
 app.use("/api/post", PostRouter);
 app.use("/api/post/comment", CommentRouter);
+app.use("/api/profile", ProfileRouter);
 
 app.get("*", (req: Request, res: Response) => {
   console.log(req.url);
