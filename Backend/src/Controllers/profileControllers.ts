@@ -35,7 +35,9 @@ export const getProfileInfo = async (
 
     const following = info.followers.length;
 
-    res.status(200).json({ ...info, followers, following });
+    const isFollowing = info.followers.some((id) => id.toString() === userID);
+
+    res.status(200).json({ ...info, followers, following, isFollowing });
     return;
   } catch (err) {
     console.error("Error occured authController.ts > getUserInfo : ", err);

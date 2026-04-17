@@ -5,7 +5,7 @@ export type CreatePostInput = {
   image: string[];
   description?: string;
   location?: string;
-  likes?: Types.ObjectId[];
+  waves?: Types.ObjectId[];
   categories?: Types.ObjectId[];
 };
 

@@ -6,7 +6,7 @@ export interface PostsDocument extends Document {
   image: string[];
   description?: string;
   location?: string;
-  likes: Types.ObjectId[];
+  waves: Types.ObjectId[];
   categories: Types.ObjectId[];
   views: number;
   pinned?: boolean;
@@ -34,7 +34,7 @@ const postSchema = new mongoose.Schema<PostsDocument>(
       type: String,
       required: false,
     },
-    likes: {
+    waves: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
       default: [],
